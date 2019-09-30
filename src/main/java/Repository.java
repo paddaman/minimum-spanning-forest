@@ -10,27 +10,45 @@ public class Repository {
 
     private static final Scanner input = new Scanner(System.in);
 
-    public static List<Node> getNeighbours(int node, int numberOfNodes, boolean runOnKattis) {
-        if (runOnKattis) {
-            System.out.println(node);
-            System.out.flush();
 
-            String[] neighbourStringArray = input.nextLine().split(" ");
+    private static int numberOfNodes = 21000000;
+    private static float eps = 0.1f;
+    private static int maxWeight = 3;
 
-            return convertToList(neighbourStringArray);
-
-        } else {
-            int leftNeighbour = (node-1) % numberOfNodes;
-            int rightNeighbour = (node+1) % numberOfNodes;
-            int weight = 1;
-            return Arrays.asList(new Node(leftNeighbour, weight), new Node(rightNeighbour, weight));
-        }
+    public static GraphInformation getGraphInformation() {
+        numberOfNodes = Integer.parseInt(input.nextLine());
+        eps = Float.parseFloat(input.nextLine()) - 1.0f;
+        maxWeight = Integer.parseInt(input.nextLine());
+        return new GraphInformation(numberOfNodes, eps, maxWeight);
     }
 
-    private static List<Node> convertToList(String[] neighbourString) {
+    public static GraphInformation getMockedGraphInformation() {
+        return new GraphInformation(numberOfNodes, eps, maxWeight);
+    }
+
+    public static List<Node> getNeighbours(int node) {
+
+        System.out.println(node);
+        System.out.flush();
+
+        String[] neighbourStringArray = input.nextLine().split(" ");
+
+        return convertToList(neighbourStringArray);
+
+    }
+
+    public static List<Node> getMockedNeighbours(int node, int numberOfNodes) {
+
+        int leftNeighbour = (node - 1) % numberOfNodes;
+        int rightNeighbour = (node + 1) % numberOfNodes;
+        int weight = 1;
+        return Arrays.asList(new Node(leftNeighbour, weight), new Node(rightNeighbour, weight));
+    }
+
+    private static List<Node> convertToList(String[] neighbourStringArray) {
         List<Node> neighbours = new ArrayList<Node>();
-        for (int i = 1; i < neighbourString.length; i = i + 2) {
-            neighbours.add(new Node(Integer.parseInt(neighbourString[i]), Integer.parseInt(neighbourString[i+1])));
+        for (int i = 1; i < neighbourStringArray.length; i = i + 2) {
+            neighbours.add(new Node(Integer.parseInt(neighbourStringArray[i]), Integer.parseInt(neighbourStringArray[i + 1])));
         }
         return neighbours;
     }
