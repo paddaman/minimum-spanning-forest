@@ -11,19 +11,19 @@ public class Repository {
     private static final Scanner input = new Scanner(System.in);
 
 
-    private static int numberOfNodes = 21000000;
-    private static float eps = 0.1f;
-    private static int maxWeight = 3;
+    private static final int NUMBER_OF_NODES = 21000000;
+    private static final float EPS = 0.1f;
+    private static final int MAX_WEIGHT = 3;
 
     public static GraphInformation getGraphInformation() {
-        numberOfNodes = Integer.parseInt(input.nextLine());
-        eps = Float.parseFloat(input.nextLine()) - 1.0f;
-        maxWeight = Integer.parseInt(input.nextLine());
+        int numberOfNodes = Integer.parseInt(input.nextLine());
+        float eps = Float.parseFloat(input.nextLine()) - 1.0f;
+        int maxWeight = Integer.parseInt(input.nextLine());
         return new GraphInformation(numberOfNodes, eps, maxWeight);
     }
 
     public static GraphInformation getMockedGraphInformation() {
-        return new GraphInformation(numberOfNodes, eps, maxWeight);
+        return new GraphInformation(NUMBER_OF_NODES, EPS, MAX_WEIGHT);
     }
 
     public static List<Node> getNeighbours(int node) {
