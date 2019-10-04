@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 class MinimumSpanningTreeExample {
 
     private static final boolean runOnKattis = true;
@@ -9,9 +7,11 @@ class MinimumSpanningTreeExample {
 
     public static void main(String args[]) {
 
-        GraphInformation graphInformation = Service.getGraphInformation(runOnKattis);
+        Service service = new Service(new Repository());
 
-        float result = Service.getMinimumSpanningTree(runOnKattis, SAMPLE_SIZE, graphInformation);
+        GraphInformation graphInformation = service.getGraphInformation(runOnKattis);
+
+        float result = service.getMinimumSpanningTree(runOnKattis, SAMPLE_SIZE, graphInformation);
 
         //print the answer
         System.out.println("end "+ result);

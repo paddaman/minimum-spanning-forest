@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -7,15 +6,21 @@ import java.util.Random;
  */
 public class Service {
 
-    public static GraphInformation getGraphInformation(boolean runOnKattis) {
+    private Repository repository;
+
+    public Service(Repository repository) {
+        this.repository = repository;
+    }
+
+    public GraphInformation getGraphInformation(boolean runOnKattis) {
         if (runOnKattis) {
-            return Repository.getGraphInformation();
+            return repository.getGraphInformation();
         } else {
-            return Repository.getMockedGraphInformation();
+            return repository.getMockedGraphInformation();
         }
     }
 
-    public static float getMinimumSpanningTree(boolean runOnKattis, int sampleSize, GraphInformation graphInformation) {
+    public float getMinimumSpanningTree(boolean runOnKattis, int sampleSize, GraphInformation graphInformation) {
         int sumOfWeights = 0;
         int numEdges = 0;
         Random random = new Random();
@@ -37,11 +42,11 @@ public class Service {
         return  averageEdgeWeight * (graphInformation.getNumberOfNodes()-1);
     }
 
-    private static List<Node> getNeighbours(boolean runOnKattis, GraphInformation graphInformation, int node) {
+    public List<Node> getNeighbours(boolean runOnKattis, GraphInformation graphInformation, int node) {
         if (runOnKattis) {
-            return Repository.getNeighbours(node); //get the list of neighbors and the corresponding weights
+            return repository.getNeighbours(node); //get the list of neighbors and the corresponding weights
         } else {
-            return Repository.getMockedNeighbours(node, graphInformation.getNumberOfNodes());
+            return repository.getMockedNeighbours(node, graphInformation.getNumberOfNodes());
         }
     }
 }
