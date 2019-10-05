@@ -47,7 +47,7 @@ public class Repository {
         return Arrays.asList(new Node(leftNeighbour, weight), new Node(rightNeighbour, weight));
     }
 
-    private List<Node> convertToList(String[] neighbourStringArray) {
+    List<Node> convertToList(String[] neighbourStringArray) {
         if (neighbourStringArray.length > 1) {
             List<Node> neighbours = new ArrayList<Node>();
             for (int i = 1; i < neighbourStringArray.length; i = i + 2) {
