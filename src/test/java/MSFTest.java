@@ -17,9 +17,10 @@ public class MSFTest {
 
     private static final int ONE = 1;
     private static final int TWO = 2;
+    private static final int THREE = 3;
     private static final int COMPONENT_SIZE_4 = 4;
 
-    private static final GraphInformation GRAPH_INFORMATION = new GraphInformation(7, 0.2f, 1);
+    private GraphInformation GRAPH_INFORMATION = new GraphInformation(7, 0.2f, 1);
 
     private Repository repository = mock(Repository.class);
     private MSF minimumSpanningTree = new MSF(repository);
@@ -149,7 +150,7 @@ public class MSFTest {
         setupUndirectedGraph_forest();
         when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
         float result = minimumSpanningTree.estimateComponentSize(GRAPH_INFORMATION, 4, TWO, 1);
-        assertEquals(3.5f, result, 0.1f);
+        assertEquals(5f, result, 0.1f);
     }
 
     @Test
@@ -157,7 +158,7 @@ public class MSFTest {
         setupUndirectedGraph_forest();
         when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
         float result = minimumSpanningTree.estimateComponentSize(GRAPH_INFORMATION, 8, TWO, 1);
-        assertEquals(7f, result, 0.1f);
+        assertEquals(10f, result, 0.1f);
     }
 
     /*
@@ -196,18 +197,18 @@ public class MSFTest {
         setupUndirectedGraph_forest();
         when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
         float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 2, TWO);
-        assertEquals(7f, result, 0.1f);
+        assertEquals(10f, result, 0.1f);
     }
 
     /*
      * b == 1 means 1 connected component, therefore the weight will be the number of nodes - max weight.
      */
     @Test
-    public void approximateWeight_shouldBe3point5_because_b_shouldBe1() {
+    public void approximateWeight2_shouldBe3point5_because_b_shouldBe1() {
         setupUndirectedGraph_forest();
         when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
         float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, TWO);
-        assertEquals(3.5f, result, 0.1f);
+        assertEquals(5f, result, 0.1f);
     }
 
     /*
@@ -217,7 +218,55 @@ public class MSFTest {
     public void approximateWeight2_shouldBe0_because_b_shouldBe2() {
         setupUndirectedGraph_forest();
         when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, ONE);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, TWO);
+        assertEquals(0f, result, 0.1f);
+    }
+
+    /*
+     * approximate with forest.
+     */
+
+    /*
+     * b == 0 means 3 connected component, therefore the weight will be  because we assume all nodes are connected.
+     */
+    @Test
+    public void approximateWeight3_shouldBe7_because_b_shouldBe0() {
+        setupUndirectedGraph_forest();
+        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 2, THREE);
+        assertEquals(10f, result, 0.1f);
+    }
+
+    /*
+     * b == 1 means 2 connected component, and the rest are non connected.
+     */
+    @Test
+    public void approximateWeight3_shouldBe6point66_because_b_shouldBe1() {
+        setupUndirectedGraph_forest();
+        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, THREE);
+        assertEquals(6.66f, result, 0.1f);
+    }
+
+    /*
+     * b == 2 means 1 connected component, and the rest are non connected.
+     */
+    @Test
+    public void approximateWeight3_shouldBe3point33_because_b_shouldBe2() {
+        setupUndirectedGraph_forest();
+        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, THREE);
+        assertEquals(3.33f, result, 0.1f);
+    }
+
+    /*
+     * b == 3 means 0 connected components, therefore the weight will be 0 because we assume there are no edges at all.
+     */
+    @Test
+    public void approximateWeight3_shouldBe0_because_b_shouldBe3() {
+        setupUndirectedGraph_forest();
+        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, THREE);
         assertEquals(0f, result, 0.1f);
     }
 
@@ -226,6 +275,7 @@ public class MSFTest {
     }
 
     public void setupUndirectedGraph_forest() {
+        GRAPH_INFORMATION = new GraphInformation(10, GRAPH_INFORMATION.getEps(), GRAPH_INFORMATION.getMaxWeight());
         List<List<Node>> listOfNodeLists = createSevenNodes(1);
         setupMockGraph(listOfNodeLists, 1);
         List<List<Node>> listOfNodeLists2 = createThreeNodes(8);
