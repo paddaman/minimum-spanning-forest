@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by patrik.ingverud on 2019-10-03.
  */
-public class MSTTest {
+public class MSFTest {
 
     private static final List<Node> NODE_LIST_1 = Arrays.asList(new Node(2, 1), new Node(3, 1));
     private static final List<Node> NODE_LIST_2 = Arrays.asList(new Node(4, 1), new Node(5, 1));
@@ -26,7 +26,7 @@ public class MSTTest {
     private static final int COMPONENT_SIZE_4 = 4;
 
     private Repository repository = mock(Repository.class);
-    private MST minimumSpanningTree = new MST(repository);
+    private MSF minimumSpanningTree = new MSF(repository);
 
     @Before
     public void setupDirectedGraph() {

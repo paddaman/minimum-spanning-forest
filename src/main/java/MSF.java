@@ -7,37 +7,33 @@ import java.util.Set;
 /**
  * Created by patrik.ingverud on 2019-10-02.
  */
-public class MST {
-
-    private static final int X = 5;
-    private static final int NUMBER_OF_RANDOM_NODES = 5;
+public class MSF {
 
     private Repository repository;
 
-    public MST(Repository repository) {
+    public MSF(Repository repository) {
         this.repository = repository;
     }
 
-    public int approximateWeight(GraphInformation graphInformation) {
-        int components = 0;
+    public float approximateWeight(GraphInformation graphInformation, int componentSize, int numberOfRandomNodes) {
+        float components = 0f;
         for (int i = 0; i < graphInformation.getMaxWeight(); i++) {
-            components =+ estimateComponents(graphInformation, i);
+            components =+ estimateComponents(graphInformation, componentSize, numberOfRandomNodes, i);
         }
-        return components;
+        components -= graphInformation.getMaxWeight()*(estimateComponents(graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight())-1);
+        return graphInformation.getNumberOfNodes() - graphInformation.getMaxWeight() + components;
     }
 
-    private int estimateComponents(GraphInformation graphInformation, int edgeWeight) {
-        int x = 0;
-        for (int i = 0; i < NUMBER_OF_RANDOM_NODES; i++) {
+    private float estimateComponents(GraphInformation graphInformation, int componentSize, int numberOfRandomNodes, int edgeWeight) {
+        int b = 0;
+        for (int i = 0; i < numberOfRandomNodes; i++) {
             int startNode = repository.getRandom(graphInformation.getMaxWeight());
-            int count = breadthFirstSearch(X, edgeWeight, startNode);
-            if (count == X) {
-                return x++;
-            } else {
-                return 0;
+            int count = breadthFirstSearch(componentSize, edgeWeight, startNode);
+            if (count == componentSize) {
+                b++;
             }
         }
-        return x;
+        return ((float) graphInformation.getNumberOfNodes()/numberOfRandomNodes)*b;
     }
 
     int breadthFirstSearch(int componentSize, int edgeWeight, int startNode) {
