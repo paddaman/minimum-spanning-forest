@@ -133,20 +133,6 @@ public class MSFTest {
         assertEquals(7f, result, 0.1f);
     }
 
-    @Test
-    public void approximateWeight_shouldBe7_because_b_shouldBe0() {
-        given(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).willReturn(1);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, ONE);
-        assertEquals(7f, result, 0.1f);
-    }
-
-    @Test
-    public void approximateWeight_shouldBe0_because_b_shouldBe1() {
-        given(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).willReturn(1);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, ONE);
-        assertEquals(0f, result, 0.1f);
-    }
-
     /*
      * Two iterations of random nodes in forest
      */
@@ -172,6 +158,67 @@ public class MSFTest {
         when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
         float result = minimumSpanningTree.estimateComponentSize(GRAPH_INFORMATION, 8, TWO, 1);
         assertEquals(7f, result, 0.1f);
+    }
+
+    /*
+     * approximate with one tree.
+     */
+
+    /*
+     * b == 0 means 1 connected component, therefore the weight will be the number of nodes - max weight.
+     */
+    @Test
+    public void approximateWeight_shouldBe7_because_b_shouldBe0() {
+        given(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).willReturn(1);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, ONE);
+        assertEquals(7f, result, 0.1f);
+    }
+
+    /*
+     * b == 1 means 0 connected component, therefore the weight will be 0 because there are no edges at all.
+     */
+    @Test
+    public void approximateWeight_shouldBe0_because_b_shouldBe1() {
+        given(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).willReturn(1);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, ONE);
+        assertEquals(0f, result, 0.1f);
+    }
+
+    /*
+     * approximate with forest.
+     */
+
+    /*
+     * b == 0 means 2 connected component, therefore the weight will be 0 because there are no edges at all.
+     */
+    @Test
+    public void approximateWeight2_shouldBe7_because_b_shouldBe0() {
+        setupUndirectedGraph_forest();
+        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 2, TWO);
+        assertEquals(7f, result, 0.1f);
+    }
+
+    /*
+     * b == 1 means 1 connected component, therefore the weight will be the number of nodes - max weight.
+     */
+    @Test
+    public void approximateWeight_shouldBe3point5_because_b_shouldBe1() {
+        setupUndirectedGraph_forest();
+        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, TWO);
+        assertEquals(3.5f, result, 0.1f);
+    }
+
+    /*
+     * b == 2 means 0 connected component, therefore the weight will be 0 because there are no edges at all.
+     */
+    @Test
+    public void approximateWeight2_shouldBe0_because_b_shouldBe2() {
+        setupUndirectedGraph_forest();
+        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, ONE);
+        assertEquals(0f, result, 0.1f);
     }
 
     private void setupNullGraph() {
