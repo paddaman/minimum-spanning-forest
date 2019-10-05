@@ -17,59 +17,46 @@ public class MSF {
 
     public float approximateWeight(GraphInformation graphInformation, int componentSize, int numberOfRandomNodes) {
         float components = 0f;
-        for (int i = 0; i < graphInformation.getMaxWeight(); i++) {
-            components =+ estimateComponents(graphInformation, componentSize, numberOfRandomNodes, i);
+        for (int i = 1; i < graphInformation.getMaxWeight(); i++) {
+            components = components + estimateComponentSize(graphInformation, componentSize, numberOfRandomNodes, i);
         }
-        components -= graphInformation.getMaxWeight()*(estimateComponents(graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight())-1);
+        components = components - graphInformation.getMaxWeight() * (estimateComponentSize(graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight()) - 1);
         return graphInformation.getNumberOfNodes() - graphInformation.getMaxWeight() + components;
+
     }
 
-    private float estimateComponents(GraphInformation graphInformation, int componentSize, int numberOfRandomNodes, int edgeWeight) {
+    float estimateComponentSize(GraphInformation graphInformation, int componentSize, int numberOfRandomNodes, int edgeWeight) {
         int b = 0;
         for (int i = 0; i < numberOfRandomNodes; i++) {
             int startNode = repository.getRandom(graphInformation.getMaxWeight());
             int count = breadthFirstSearch(componentSize, edgeWeight, startNode);
-            if (count == componentSize) {
+            if (count <= componentSize) {
                 b++;
             }
         }
-        return ((float) graphInformation.getNumberOfNodes()/numberOfRandomNodes)*b;
+        return ((float) graphInformation.getNumberOfNodes() / numberOfRandomNodes) * b;
     }
 
     int breadthFirstSearch(int componentSize, int edgeWeight, int startNode) {
-        Queue<Integer> subGraph = new LinkedList<>();
+        Queue<List<Node>> subGraph = new LinkedList<>();
         List<Node> nodes = repository.getNeighbours(startNode);
         Set<Integer> visited = new HashSet<>();
-        subGraph.add(startNode);
+        subGraph.add(nodes);
         visited.add(startNode);
         int count = 1;
-        int num = 0;
-        while (!subGraph.isEmpty() && count < componentSize) {
-            startNode = subGraph.poll();
+        while (!subGraph.isEmpty() && count <= componentSize) {
+            nodes = subGraph.poll();
 
             for (Node node : nodes) {
-                int nextNode = node.getNumber();
-                if (!visited.contains(nextNode) && node.getWeight() <= edgeWeight && count < componentSize){
-                    visited.add(nextNode);
-                    subGraph.add(nextNode);
+                startNode = node.getNumber();
+                if (!visited.contains(startNode) && node.getWeight() <= edgeWeight && count <= componentSize) {
+                    visited.add(startNode);
+                    subGraph.add(repository.getNeighbours(startNode));
                     count++;
-                    num++;
                 }
-            }
-            if (isAtLeastOneMoreIteration(componentSize, num) && hasMoreNodesToVisit(subGraph)) {
-                num = 0;
-                nodes = repository.getNeighbours(nodes.get(num).getNumber());
             }
         }
         return count;
-    }
-
-    private boolean hasMoreNodesToVisit(Queue<Integer> subGraph) {
-        return subGraph.poll() != null;
-    }
-
-    private boolean isAtLeastOneMoreIteration(int componentSize, int j) {
-        return j < (componentSize - 1);
     }
 
 }
