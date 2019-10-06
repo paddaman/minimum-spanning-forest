@@ -8,6 +8,7 @@ import java.util.Random;
 public class GroupExercise1B {
 
     private static final int SAMPLE_SIZE = 200000;
+    private static final int D = SAMPLE_SIZE/1000;
     private static final int PROBABILITY = 10;
 
     public static void main(String args[]) {
@@ -32,9 +33,9 @@ public class GroupExercise1B {
 
 
         int num = getNum(random, integers);
-        float prob = ((float) num/(200));
+        float prob = ((float) num/(D));
         System.out.println("Probability: " + prob);
-        System.out.println("Percentage: " + (Math.pow((double)1f-prob, (double)1/(PROBABILITY))));
+        System.out.println("Percentage: " + (Math.pow((double)prob, (double)1/(PROBABILITY))));
         System.out.println("NUM: " + num);
     }
 
@@ -42,16 +43,16 @@ public class GroupExercise1B {
         int num = 0;
         int count;
         int var;
-        for (int j = 0; j < 200; j++) {
+        for (int j = 0; j < D; j++) {
             count = 0;
             for (int i = 0; i < PROBABILITY; i++) {
 
                 var = random.nextInt(SAMPLE_SIZE);
-                if (integers[var] == 1) {
+                if (integers[var] != 1) {
                     count++;
                 }
             }
-            if (count > 0) {
+            if (count == PROBABILITY) {
                 num++;
             }
             System.out.println("count: " + count);

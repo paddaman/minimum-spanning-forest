@@ -9,27 +9,27 @@ import java.util.Set;
  */
 public class MSF {
 
-    private Repository repository;
+    private Service service;
 
-    public MSF(Repository repository) {
-        this.repository = repository;
+    public MSF(Service service) {
+        this.service = service;
     }
 
-    public float approximateWeight(GraphInformation graphInformation, int componentSize, int numberOfRandomNodes) {
+    public float approximateWeight(boolean runOnKattis, GraphInformation graphInformation, int componentSize, int numberOfRandomNodes) {
         float components = 0f;
         for (int i = 1; i < graphInformation.getMaxWeight(); i++) {
-            components = components + estimateComponentSize(graphInformation, componentSize, numberOfRandomNodes, i);
+            components = components + estimateComponentSize(runOnKattis, graphInformation, componentSize, numberOfRandomNodes, i);
         }
-        components = components - graphInformation.getMaxWeight() * (estimateComponentSize(graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight()) - 1);
+        components = components - graphInformation.getMaxWeight() * (estimateComponentSize(runOnKattis, graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight()) - 1);
         return graphInformation.getNumberOfNodes() - graphInformation.getMaxWeight() + components;
 
     }
 
-    float estimateComponentSize(GraphInformation graphInformation, int componentSize, int numberOfRandomNodes, int edgeWeight) {
+    float estimateComponentSize(boolean runOnKattis, GraphInformation graphInformation, int componentSize, int numberOfRandomNodes, int edgeWeight) {
         int b = 0;
         for (int i = 0; i < numberOfRandomNodes; i++) {
-            int startNode = repository.getRandom(graphInformation.getMaxWeight());
-            int count = breadthFirstSearch(componentSize, edgeWeight, startNode);
+            int startNode = service.getRandom(graphInformation.getNumberOfNodes());
+            int count = breadthFirstSearch(runOnKattis, graphInformation, componentSize, edgeWeight, startNode);
             if (count <= componentSize) {
                 b++;
             }
@@ -37,9 +37,9 @@ public class MSF {
         return ((float) graphInformation.getNumberOfNodes() / numberOfRandomNodes) * b;
     }
 
-    int breadthFirstSearch(int componentSize, int edgeWeight, int startNode) {
+    int breadthFirstSearch(boolean runOnKattis, GraphInformation graphInformation, int componentSize, int edgeWeight, int startNode) {
         Queue<List<Node>> subGraph = new LinkedList<>();
-        List<Node> nodes = repository.getNeighbours(startNode);
+        List<Node> nodes = service.getNeighbours(runOnKattis, graphInformation, startNode);
         Set<Integer> visited = new HashSet<>();
         subGraph.add(nodes);
         visited.add(startNode);
@@ -51,7 +51,7 @@ public class MSF {
                 startNode = node.getNumber();
                 if (!visited.contains(startNode) && node.getWeight() <= edgeWeight && count <= componentSize) {
                     visited.add(startNode);
-                    subGraph.add(repository.getNeighbours(startNode));
+                    subGraph.add(service.getNeighbours(runOnKattis, graphInformation, startNode));
                     count++;
                 }
             }

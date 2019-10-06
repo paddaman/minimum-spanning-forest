@@ -13,7 +13,7 @@ public class Repository {
     private static final Scanner input = new Scanner(System.in);
     private static final Random random = new Random();
 
-    private static final int NUMBER_OF_NODES = 21000000;
+    private static final int NUMBER_OF_NODES = 3000;
     private static final float EPS = 0.1f;
     private static final int MAX_WEIGHT = 3;
 
@@ -43,7 +43,7 @@ public class Repository {
 
         int leftNeighbour = (node - 1) % numberOfNodes;
         int rightNeighbour = (node + 1) % numberOfNodes;
-        int weight = 1;
+        int weight = getRandom(MAX_WEIGHT);
         return Arrays.asList(new Node(leftNeighbour, weight), new Node(rightNeighbour, weight));
     }
 

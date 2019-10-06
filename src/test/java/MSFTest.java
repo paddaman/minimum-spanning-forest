@@ -22,8 +22,8 @@ public class MSFTest {
 
     private GraphInformation GRAPH_INFORMATION = new GraphInformation(7, 0.2f, 1);
 
-    private Repository repository = mock(Repository.class);
-    private MSF minimumSpanningTree = new MSF(repository);
+    private Service service = mock(Service.class);
+    private MSF minimumSpanningTree = new MSF(service);
 
     @Before
     public void setupUndirectedGraph() {
@@ -33,7 +33,7 @@ public class MSFTest {
 
     private void setupMockGraph(List<List<Node>> listOfNodeLists, int startNode) {
         for (int i = startNode; i < listOfNodeLists.size() + startNode; i++) {
-            given(repository.getNeighbours(i)).willReturn(listOfNodeLists.get(i - startNode));
+            given(service.getNeighbours(false, GRAPH_INFORMATION, i)).willReturn(listOfNodeLists.get(i - startNode));
         }
     }
 
@@ -65,55 +65,55 @@ public class MSFTest {
     @Test
     public void breadthFirstSearch_undirected_null() {
         setupNullGraph();
-        int result = minimumSpanningTree.breadthFirstSearch(COMPONENT_SIZE_4, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, COMPONENT_SIZE_4, 1, 1);
         assertEquals(1, result);
     }
 
     @Test
     public void breadthFirstSearch_undirected_1() {
-        int result = minimumSpanningTree.breadthFirstSearch(1, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, 1, 1, 1);
         assertEquals(2, result);
     }
 
     @Test
     public void breadthFirstSearch_undirected_2() {
-        int result = minimumSpanningTree.breadthFirstSearch(2, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, 2, 1, 1);
         assertEquals(3, result);
     }
 
     @Test
     public void breadthFirstSearch_undirected_3() {
-        int result = minimumSpanningTree.breadthFirstSearch(3, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, 3, 1, 1);
         assertEquals(4, result);
     }
 
     @Test
     public void breadthFirstSearch_undirected_4() {
-        int result = minimumSpanningTree.breadthFirstSearch(4, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, 4, 1, 1);
         assertEquals(5, result);
     }
 
     @Test
     public void breadthFirstSearch_undirected_5() {
-        int result = minimumSpanningTree.breadthFirstSearch(5, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, 5, 1, 1);
         assertEquals(6, result);
     }
 
     @Test
     public void breadthFirstSearch_undirected_6() {
-        int result = minimumSpanningTree.breadthFirstSearch(6, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, 6, 1, 1);
         assertEquals(7, result);
     }
 
     @Test
     public void breadthFirstSearch_undirected_7() {
-        int result = minimumSpanningTree.breadthFirstSearch(7, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, 7, 1, 1);
         assertEquals(7, result);
     }
 
     @Test
     public void breadthFirstSearch_undirected_moreThan7() {
-        int result = minimumSpanningTree.breadthFirstSearch(8, 1, 1);
+        int result = minimumSpanningTree.breadthFirstSearch(false, GRAPH_INFORMATION, 8, 1, 1);
         assertEquals(7, result);
     }
 
@@ -122,15 +122,15 @@ public class MSFTest {
      */
     @Test
     public void estimateComponentSize_numberOfRandomNodes_b_shouldBe0() {
-        given(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).willReturn(1);
-        float result = minimumSpanningTree.estimateComponentSize(GRAPH_INFORMATION, COMPONENT_SIZE_4, ONE, 1);
+        given(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).willReturn(1);
+        float result = minimumSpanningTree.estimateComponentSize(false, GRAPH_INFORMATION, COMPONENT_SIZE_4, ONE, 1);
         assertEquals(0f, result, 0.1f);
     }
 
     @Test
     public void estimateComponentSize_numberOfRandomNodes_b_shouldBe1() {
-        given(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).willReturn(1);
-        float result = minimumSpanningTree.estimateComponentSize(GRAPH_INFORMATION, 8, ONE, 1);
+        given(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).willReturn(1);
+        float result = minimumSpanningTree.estimateComponentSize(false, GRAPH_INFORMATION, 8, ONE, 1);
         assertEquals(7f, result, 0.1f);
     }
 
@@ -140,24 +140,24 @@ public class MSFTest {
     @Test
     public void estimateComponentSize_numberOfRandomNodes2_b_shouldBe0() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.estimateComponentSize(GRAPH_INFORMATION, 2, TWO, 1);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.estimateComponentSize(false, GRAPH_INFORMATION, 2, TWO, 1);
         assertEquals(0f, result, 0.1f);
     }
 
     @Test
     public void estimateComponentSize_numberOfRandomNodes2_b_shouldBe1() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.estimateComponentSize(GRAPH_INFORMATION, 4, TWO, 1);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.estimateComponentSize(false, GRAPH_INFORMATION, 4, TWO, 1);
         assertEquals(5f, result, 0.1f);
     }
 
     @Test
     public void estimateComponentSize_numberOfRandomNodes2_b_shouldBe2() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.estimateComponentSize(GRAPH_INFORMATION, 8, TWO, 1);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.estimateComponentSize(false, GRAPH_INFORMATION, 8, TWO, 1);
         assertEquals(10f, result, 0.1f);
     }
 
@@ -170,8 +170,8 @@ public class MSFTest {
      */
     @Test
     public void approximateWeight_shouldBe7_because_b_shouldBe0() {
-        given(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).willReturn(1);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, ONE);
+        given(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).willReturn(1);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, COMPONENT_SIZE_4, ONE);
         assertEquals(7f, result, 0.1f);
     }
 
@@ -180,8 +180,8 @@ public class MSFTest {
      */
     @Test
     public void approximateWeight_shouldBe0_because_b_shouldBe1() {
-        given(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).willReturn(1);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, ONE);
+        given(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).willReturn(1);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, 8, ONE);
         assertEquals(0f, result, 0.1f);
     }
 
@@ -195,8 +195,8 @@ public class MSFTest {
     @Test
     public void approximateWeight2_shouldBe7_because_b_shouldBe0() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 2, TWO);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, 2, TWO);
         assertEquals(10f, result, 0.1f);
     }
 
@@ -206,8 +206,8 @@ public class MSFTest {
     @Test
     public void approximateWeight2_shouldBe3point5_because_b_shouldBe1() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, TWO);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, COMPONENT_SIZE_4, TWO);
         assertEquals(5f, result, 0.1f);
     }
 
@@ -217,8 +217,8 @@ public class MSFTest {
     @Test
     public void approximateWeight2_shouldBe0_because_b_shouldBe2() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, TWO);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, 8, TWO);
         assertEquals(0f, result, 0.1f);
     }
 
@@ -232,8 +232,8 @@ public class MSFTest {
     @Test
     public void approximateWeight3_shouldBe7_because_b_shouldBe0() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 2, THREE);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, 2, THREE);
         assertEquals(10f, result, 0.1f);
     }
 
@@ -243,8 +243,8 @@ public class MSFTest {
     @Test
     public void approximateWeight3_shouldBe6point66_because_b_shouldBe1() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, THREE);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, COMPONENT_SIZE_4, THREE);
         assertEquals(6.66f, result, 0.1f);
     }
 
@@ -254,8 +254,8 @@ public class MSFTest {
     @Test
     public void approximateWeight3_shouldBe3point33_because_b_shouldBe2() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(8).thenReturn(8);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, COMPONENT_SIZE_4, THREE);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(8).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, COMPONENT_SIZE_4, THREE);
         assertEquals(3.33f, result, 0.1f);
     }
 
@@ -265,13 +265,13 @@ public class MSFTest {
     @Test
     public void approximateWeight3_shouldBe0_because_b_shouldBe3() {
         setupUndirectedGraph_forest();
-        when(repository.getRandom(GRAPH_INFORMATION.getMaxWeight())).thenReturn(1).thenReturn(1).thenReturn(8);
-        float result = minimumSpanningTree.approximateWeight(GRAPH_INFORMATION, 8, THREE);
+        when(service.getRandom(GRAPH_INFORMATION.getNumberOfNodes())).thenReturn(1).thenReturn(1).thenReturn(8);
+        float result = minimumSpanningTree.approximateWeight(false, GRAPH_INFORMATION, 8, THREE);
         assertEquals(0f, result, 0.1f);
     }
 
     private void setupNullGraph() {
-        given(repository.getNeighbours(1)).willReturn(Collections.emptyList());
+        given(service.getNeighbours(false, GRAPH_INFORMATION, 1)).willReturn(Collections.emptyList());
     }
 
     public void setupUndirectedGraph_forest() {

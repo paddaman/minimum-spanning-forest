@@ -39,7 +39,7 @@ public class Service {
         //A spanning tree always consists of N-1 edges,
         //so one could think a minimum spanning tree would have roughly the following weight.
         // (Note: This idea is wrong because a MINIMUM spanning tree will try to use only small edges)
-        return  averageEdgeWeight * (graphInformation.getNumberOfNodes()-1);
+        return averageEdgeWeight * (graphInformation.getNumberOfNodes() - 1);
     }
 
     public List<Node> getNeighbours(boolean runOnKattis, GraphInformation graphInformation, int node) {
@@ -48,5 +48,11 @@ public class Service {
         } else {
             return repository.getMockedNeighbours(node, graphInformation.getNumberOfNodes());
         }
+    }
+
+    public int getRandom(int maxNumberOfNodes) {
+
+        return repository.getRandom(maxNumberOfNodes); //get the list of neighbors and the corresponding weights
+
     }
 }
