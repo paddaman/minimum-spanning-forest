@@ -13,7 +13,7 @@ public class Repository {
     private static final Scanner input = new Scanner(System.in);
     private static final Random random = new Random();
 
-    private static final int NUMBER_OF_NODES = 3000;
+    private static final int NUMBER_OF_NODES = 1000;
     private static final float EPS = 0.1f;
     private static final int MAX_WEIGHT = 3;
 
@@ -39,11 +39,12 @@ public class Repository {
 
     }
 
-    public List<Node> getMockedNeighbours(int node, int numberOfNodes) {
+    public List<Node> getMockedNeighbours(int node, GraphInformation graphInformation) {
 
-        int leftNeighbour = (node - 1) % numberOfNodes;
-        int rightNeighbour = (node + 1) % numberOfNodes;
-        int weight = getRandom(MAX_WEIGHT);
+        int leftNeighbour = (node - 1) % graphInformation.getNumberOfNodes();
+        int rightNeighbour = (node + 1) % graphInformation.getNumberOfNodes();
+        int weight = getRandom(graphInformation.getMaxWeight()) + 1;
+        //System.out.println(weight);
         return Arrays.asList(new Node(leftNeighbour, weight), new Node(rightNeighbour, weight));
     }
 

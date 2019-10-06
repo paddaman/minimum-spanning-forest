@@ -46,7 +46,7 @@ public class Service {
         if (runOnKattis) {
             return repository.getNeighbours(node); //get the list of neighbors and the corresponding weights
         } else {
-            return repository.getMockedNeighbours(node, graphInformation.getNumberOfNodes());
+            return repository.getMockedNeighbours(node, graphInformation);
         }
     }
 

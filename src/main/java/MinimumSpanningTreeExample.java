@@ -9,15 +9,14 @@ class MinimumSpanningTreeExample {
         MSF msf = new MSF(service);
 
         GraphInformation graphInformation = service.getGraphInformation(runOnKattis);
-        int componentSize = graphInformation.getMaxWeight()*10;
-        int sampleSize = graphInformation.getMaxWeight()*4;
-        for (int i = 0; i < 20; i++) {
-            float result = msf.approximateWeight(runOnKattis, graphInformation, componentSize, sampleSize);
+        int componentSize = graphInformation.getMaxWeight();
+        int sampleSize = graphInformation.getNumberOfNodes();
+        float result = msf.approximateWeight(runOnKattis, graphInformation, componentSize, sampleSize);
 
-            //print the answer
-            System.out.println("end " + result);
-            System.out.flush();
-        }
+        //print the answer
+        System.out.println("end " + result);
+        System.out.flush();
+
     }
 
 }
