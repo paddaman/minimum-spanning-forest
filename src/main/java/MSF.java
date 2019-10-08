@@ -20,14 +20,13 @@ public class MSF {
         for (int i = 1; i < graphInformation.getMaxWeight(); i++) {
             components = components + estimateComponentSize(runOnKattis, graphInformation, componentSize, numberOfRandomNodes, i);
         }
-        //components = components - graphInformation.getMaxWeight() * (estimateComponentSize(runOnKattis, graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight()) - 1);
+        components = components - graphInformation.getMaxWeight() * (estimateComponentSize(runOnKattis, graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight()) - 1);
         return graphInformation.getNumberOfNodes() - graphInformation.getMaxWeight() + components;
 
     }
 
     float estimateComponentSize(boolean runOnKattis, GraphInformation graphInformation, int componentSize, int numberOfRandomNodes, int edgeWeight) {
         int b = 0;
-        componentSize = Math.round((float)componentSize/edgeWeight);
         for (int i = 0; i < numberOfRandomNodes; i++) {
             int startNode = service.getRandom(graphInformation.getNumberOfNodes());
             int count = breadthFirstSearch(runOnKattis, graphInformation, componentSize, edgeWeight, startNode);
@@ -35,6 +34,7 @@ public class MSF {
                 b++;
             }
         }
+        //System.out.println(((float) graphInformation.getNumberOfNodes() / numberOfRandomNodes) * b);
         return ((float) graphInformation.getNumberOfNodes() / numberOfRandomNodes) * b;
     }
 
@@ -58,6 +58,14 @@ public class MSF {
             }
         }
         return count;
+    }
+
+    private float getP(int edgeWeight) {
+        return (float) Math.pow(1f / edgeWeight, 1f / edgeWeight);
+    }
+
+    private int getX(float prob, int edges) {
+        return Math.round(prob * edges) == 1 ? Math.round(prob * edges) + 1 : Math.round(prob * edges);
     }
 
 }

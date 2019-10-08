@@ -44,6 +44,9 @@ public class Repository {
         int leftNeighbour = (node - 1) % graphInformation.getNumberOfNodes();
         int rightNeighbour = (node + 1) % graphInformation.getNumberOfNodes();
         int weight = getRandom(graphInformation.getMaxWeight()) + 1;
+        /*if (weight < 6) {
+            weight++;
+        }*/
         //System.out.println(weight);
         return Arrays.asList(new Node(leftNeighbour, weight), new Node(rightNeighbour, weight));
     }
