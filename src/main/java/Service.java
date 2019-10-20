@@ -55,4 +55,10 @@ public class Service {
         return repository.getRandom(maxNumberOfNodes); //get the list of neighbors and the corresponding weights
 
     }
+
+    public double getRandomDouble() {
+
+        return repository.getRandomDouble(); //get the list of neighbors and the corresponding weights
+
+    }
 }

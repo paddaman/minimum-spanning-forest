@@ -66,4 +66,8 @@ public class Repository {
     public int getRandom(int maxNumberOfNodes) {
         return random.nextInt(maxNumberOfNodes);
     }
+
+    public double getRandomDouble() {
+        return random.nextDouble();
+    }
 }

@@ -20,7 +20,7 @@ public class MSF {
         for (int i = 1; i < graphInformation.getMaxWeight(); i++) {
             components = components + estimateComponentSize(runOnKattis, graphInformation, componentSize, numberOfRandomNodes, i);
         }
-        components = components - graphInformation.getMaxWeight() * (estimateComponentSize(runOnKattis, graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight()) - 1);
+        components = components - (graphInformation.getMaxWeight() * (estimateComponentSize(runOnKattis, graphInformation, componentSize, numberOfRandomNodes, graphInformation.getMaxWeight()) - 1));
         return graphInformation.getNumberOfNodes() - graphInformation.getMaxWeight() + components;
 
     }
@@ -29,6 +29,7 @@ public class MSF {
         int b = 0;
         for (int i = 0; i < numberOfRandomNodes; i++) {
             int startNode = service.getRandom(graphInformation.getNumberOfNodes());
+            componentSize = (int) Math.floor(1f/service.getRandomDouble());
             int count = breadthFirstSearch(runOnKattis, graphInformation, componentSize, edgeWeight, startNode);
             if (count <= componentSize) {
                 b++;
@@ -55,6 +56,17 @@ public class MSF {
                     subGraph.add(service.getNeighbours(runOnKattis, graphInformation, startNode));
                     count++;
                 }
+            }
+        }
+        return count;
+    }
+
+    int breadthFirstSearch2(boolean runOnKattis, GraphInformation graphInformation, int componentSize, int edgeWeight, int startNode) {
+        List<Node> nodes = service.getNeighbours(runOnKattis, graphInformation, startNode);
+        int count = 1;
+        for (Node node : nodes) {
+            if (node.getWeight() <= edgeWeight) {
+                count++;
             }
         }
         return count;

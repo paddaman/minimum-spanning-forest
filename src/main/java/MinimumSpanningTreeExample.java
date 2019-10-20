@@ -10,7 +10,7 @@ class MinimumSpanningTreeExample {
 
         GraphInformation graphInformation = service.getGraphInformation(runOnKattis);
         int componentSize = 1;
-        int sampleSize = (int) (16 * Math.pow(graphInformation.getMaxWeight(), 3) / Math.pow(graphInformation.getEps(), 2));
+        int sampleSize = (int) (16 * Math.pow(graphInformation.getMaxWeight(), 3) / Math.pow(graphInformation.getEps()+1f, 2));
         float result = msf.approximateWeight(runOnKattis, graphInformation, componentSize, sampleSize);
 
         //print the answer
